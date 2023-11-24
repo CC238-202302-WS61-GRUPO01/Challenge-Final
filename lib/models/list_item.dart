@@ -9,8 +9,8 @@ class ListItem{
   Map<String,dynamic> toMap(){
     return{
       'id': (id==0)?null:id,
-      'idProduct': idProduct,
       'idList': idList,
+      'idProduct':idProduct,
       'quantity':quantity,
       'note':note
     };

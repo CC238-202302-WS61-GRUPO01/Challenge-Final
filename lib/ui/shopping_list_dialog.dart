@@ -36,10 +36,11 @@ class ShoppingListDialog{
             ),
             ElevatedButton(
                 onPressed: (){
+                  /*
                   list.name=txtName.text;
                   list.priority=int.parse(txtPriority.text);
                   helper.insertList(list);
-                  Navigator.pop(context);
+                  Navigator.pop(context);*/
                 },
                 child: Text("Save")
             )
