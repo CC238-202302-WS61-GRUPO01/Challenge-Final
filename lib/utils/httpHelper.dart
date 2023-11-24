@@ -25,12 +25,28 @@ class HttpHelper{
 
 }
  */
+import 'package:app_s12/models/product.dart';
+import 'package:http/http.dart' as http;
+import 'dart:io';
+import 'dart:convert';
+
 class HttpHelper{
   final String urlBase = 'https://simple-grocery-store-api.online/products';
 
-  Future<List?> getProductByCategory(String category) async{
-    final String urlFinal = '$urlBase?category=$category';
-    //http.Response result = await http.get(Uri.parse(urlFinal));
+  Future<List?> getProducts() async{
+    http.Response result = await http.get(Uri.parse(urlBase));
+    if (result.statusCode == HttpStatus.ok){
+      final jsonResponse = json.decode(result.body);
+      final productsMap = jsonResponse['results'];
 
+      List products = productsMap.map(
+              (i)=>Product.fromJson(i)
+      ).toList();
+      return products;
+    }
+    else{
+      print(result.body);
+      return null;
+    }
   }
 }

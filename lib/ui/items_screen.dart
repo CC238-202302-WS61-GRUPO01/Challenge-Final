@@ -15,9 +15,16 @@ class ItemScreen extends StatefulWidget {
 class _ItemScreenState extends State<ItemScreen> {
   final ShoppingList shoppingList;
   _ItemScreenState(this.shoppingList);
+  ShoppingListDialog? dialog;
 
   DbHelper? helper;
   List<ListItem> items=[];
+
+  @override
+  void initState(){
+    dialog=ShoppingListDialog();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +39,7 @@ class _ItemScreenState extends State<ItemScreen> {
         itemCount: (items!=null) ? items.length:0,
           itemBuilder: (BuildContext context, int index){
           return ListTile(
-            title: Text(items[index].name),
+            title: Text(items[index].idProduct.toString()),
             subtitle: Text("Quantity: ${items[index].quantity} - Note: ${items[index].quantity}"),
             trailing: IconButton(
               icon: Icon(Icons.edit),
@@ -40,6 +47,14 @@ class _ItemScreenState extends State<ItemScreen> {
             ),
           );
           }),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.plus_one),
+          onPressed: (){
+            showDialog(
+                context: context,
+                builder: (BuildContext context) => dialog!.buildDialog(context, ShoppingList(0, '', 0), true));
+          },
+        )
     );
   }
 

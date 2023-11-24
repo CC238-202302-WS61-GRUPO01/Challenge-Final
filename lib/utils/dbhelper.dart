@@ -15,10 +15,11 @@ class DbHelper{
 
   Future<Database> openDb() async{
     if(db==null){
-      db=await openDatabase(join(await getDatabasesPath(), 'shoppingv1.db'),
+      db=await openDatabase(join(await getDatabasesPath(), 'shoppingv2.db'),
       onCreate: (database, version){
+        database.execute('CREATE TABLE products(id INTEGER PRIMARY KEY, name TEXT, category TEXT)');
         database.execute('CREATE TABLE lists(id INTEGER PRIMARY KEY, name TEXT, priority INTEGER)');
-        database.execute('CREATE TABLE items(id INTEGER PRIMARY KEY, idList TEXT, name TEXT, quantity TEXT, note TEXT, FOREIGN KEY(idList) REFERENCES lists(id))');
+        database.execute('CREATE TABLE items(id INTEGER PRIMARY KEY, idList TEXT, idProduct TEXT, quantity TEXT, note TEXT, FOREIGN KEY(idProduct) REFERENCES products(id)), FOREIGN KEY(idList) REFERENCES lists(id))');
       }, version: version);
     }
     return db!;
@@ -71,7 +72,7 @@ class DbHelper{
       return ListItem(
         maps[i]['id'],
         maps[i]['idList'],
-        maps[i]['name'],
+        maps[i]['idProduct'],
         maps[i]['quantity'],
         maps[i]['note'],
       );
