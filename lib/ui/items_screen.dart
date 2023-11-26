@@ -1,3 +1,4 @@
+import 'package:app_s12/ui/item_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:app_s12/utils/dbhelper.dart';
 import 'package:app_s12/models/list_item.dart';
@@ -15,14 +16,14 @@ class ItemScreen extends StatefulWidget {
 class _ItemScreenState extends State<ItemScreen> {
   final ShoppingList shoppingList;
   _ItemScreenState(this.shoppingList);
-  ShoppingListDialog? dialog;
+  ItemDialog? dialog;
 
   DbHelper? helper;
   List<ListItem> items=[];
 
   @override
   void initState(){
-    dialog=ShoppingListDialog();
+    dialog=ItemDialog();
     super.initState();
   }
 
@@ -52,7 +53,13 @@ class _ItemScreenState extends State<ItemScreen> {
           onPressed: (){
             showDialog(
                 context: context,
-                builder: (BuildContext context) => dialog!.buildDialog(context, ShoppingList(0, '', 0), true));
+                builder: (BuildContext context) => dialog!.buildDialog(
+                    context,
+                    ListItem(0, shoppingList.id, 0, 0, ''),
+                    true,
+                    shoppingList.id
+                )
+            );
           },
         )
     );

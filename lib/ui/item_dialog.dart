@@ -11,7 +11,7 @@ class ItemDialog{
   Widget buildDialog(BuildContext context, ListItem item, bool isNew,int listID){
     DbHelper helper=DbHelper();
     if(!isNew){
-      txtQuantity.text = item.quantity;
+      txtQuantity.text = item.quantity.toString();
       txtNote.text = item.note;
     }
     else{
