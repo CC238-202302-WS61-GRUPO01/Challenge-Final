@@ -37,6 +37,7 @@ class _ShowListState extends State<ShowList> {
   ShoppingListDialog? dialog;
   @override
   void initState(){
+    DbHelper.dbHelper.testDB();
     dialog=ShoppingListDialog();
     super.initState();
   }

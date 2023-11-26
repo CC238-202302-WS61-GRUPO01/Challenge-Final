@@ -1,4 +1,5 @@
 import 'package:app_s12/models/list_item.dart';
+import 'package:app_s12/ui/product_dropdown.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +10,7 @@ class ItemDialog{
   final txtNote=TextEditingController();
 
   Widget buildDialog(BuildContext context, ListItem item, bool isNew,int listID){
+    ProductDropdown productDropdown = ProductDropdown();
     DbHelper helper=DbHelper();
     if(!isNew){
       txtQuantity.text = item.quantity.toString();
@@ -36,6 +38,7 @@ class ItemDialog{
                   hintText: "Aditional Note"
               ),
             ),
+            productDropdown,
             ElevatedButton(
                 onPressed: (){
                   //list.name=txtName.text;

@@ -12,24 +12,27 @@ class ProductDropdown extends StatefulWidget {
 }
 
 class _ProductDropdownState extends State<ProductDropdown> {
-  late List products;
-  late int productsCount;
+  List? products;
+  //late int productsCount;
   int productId = 0;
 
   late HttpHelper helper;
 
   Future initialize() async{
-    products = (await helper.getProducts())!;
-    setState(() {
-      productsCount = products.length;
-      products = products;
-    });
+    helper = HttpHelper();
+    products = helper.getProducts() as List;
+  }
+  @override
+  void initState(){
+    initialize();
+    super.initState();
   }
   @override
   Widget build(BuildContext context) {
     List<DropdownMenuItem> dropdownList = [];
-    for (var prod in products){
-      var futureBuilder = FutureBuilder<Product>(
+    if(products != null){
+      for (var prod in products!){
+        var futureBuilder = FutureBuilder<Product>(
           future: prod,
           builder: (context, snapshot){
             if (snapshot.hasData) {
@@ -39,17 +42,19 @@ class _ProductDropdownState extends State<ProductDropdown> {
               );
             }
             else if (snapshot.hasError) {
-              return DropdownMenuItem(
+              return const DropdownMenuItem(
                   value: 0,
                   child: Text('Could not load data',)
               );
             }
-            return DropdownMenuItem(
+            return const DropdownMenuItem(
+                value: 0,
                 child: Text('Loading...',)
             );
           },
-      );
-      dropdownList.add(futureBuilder.builder as DropdownMenuItem);
+        );
+        dropdownList.add(futureBuilder.builder as DropdownMenuItem);
+      }
     }
     return DropdownButton(
       onChanged: (var newValue){
@@ -59,11 +64,5 @@ class _ProductDropdownState extends State<ProductDropdown> {
       },
       items: dropdownList,
     );
-  }
-  @override
-  void initState(){
-    helper = HttpHelper();
-    initialize();
-    super.initState();
   }
 }

@@ -31,22 +31,19 @@ import 'dart:io';
 import 'dart:convert';
 
 class HttpHelper{
-  final String urlBase = 'https://simple-grocery-store-api.online/products';
+  final String urlBase = 'https://simple-grocery-store-api.online';
 
   Future<List?> getProducts() async{
-    http.Response result = await http.get(Uri.parse(urlBase));
+    final result = await http.get(Uri.parse('$urlBase/products'));
     if (result.statusCode == HttpStatus.ok){
-      final jsonResponse = json.decode(result.body);
-      final productsMap = jsonResponse['results'];
-
-      List products = productsMap.map(
-              (i)=>Product.fromJson(i)
+      final List<dynamic> data = json.decode(result.body);
+      List<Product> products = data.map(
+              (json) => Product.fromJson(json)
       ).toList();
       return products;
     }
     else{
-      print(result.body);
-      return null;
+      throw Exception('Error al cargar las productos');
     }
   }
 }

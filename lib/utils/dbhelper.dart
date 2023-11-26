@@ -4,7 +4,7 @@ import 'package:app_s12/models/shopping_list.dart';
 import 'package:app_s12/models/list_item.dart';
 
 class DbHelper{
-  final int version = 1;
+  final int version = 4;
   Database? db;
 
   static final DbHelper dbHelper=DbHelper.internal();
@@ -15,11 +15,11 @@ class DbHelper{
 
   Future<Database> openDb() async{
     if(db==null){
-      db=await openDatabase(join(await getDatabasesPath(), 'shoppingv2.db'),
+      db=await openDatabase(join(await getDatabasesPath(), 'shopping.db'),
       onCreate: (database, version){
         database.execute('CREATE TABLE products(id INTEGER PRIMARY KEY, name TEXT, category TEXT)');
         database.execute('CREATE TABLE lists(id INTEGER PRIMARY KEY, name TEXT, priority INTEGER)');
-        database.execute('CREATE TABLE items(id INTEGER PRIMARY KEY, idList TEXT, idProduct TEXT, quantity TEXT, note TEXT, FOREIGN KEY(idProduct) REFERENCES products(id)), FOREIGN KEY(idList) REFERENCES lists(id))');
+        database.execute('CREATE TABLE items(id INTEGER PRIMARY KEY, idList INTEGER, idProduct INTEGER, quantity INTEGER, note TEXT, FOREIGN KEY(idProduct) REFERENCES products(id)), FOREIGN KEY(idList) REFERENCES lists(id))');
       }, version: version);
     }
     return db!;
@@ -28,11 +28,11 @@ class DbHelper{
   Future testDB() async{
     db = await openDb();
 
-    //await db!.execute('INSERT INTO lists VALUES(0, "Monitores", 1)');
-    //await db!.execute('INSERT INTO lists VALUES(1, "Impresoras", 3)');
-    //await db!.execute('INSERT INTO lists VALUES(2, "Teclados", 3)');
-    //await db!.execute('INSERT INTO items VALUES(0, 0, "Monitor LG", "6 Unds", "21 in")');
-    //await db!.execute('INSERT INTO items VALUES(1, 1, "Impresora HP", "10 Unds", "Tinta no incluida")');
+    await db!.execute('INSERT INTO lists VALUES(0, "Monitores", 1)');
+    await db!.execute('INSERT INTO lists VALUES(1, "Impresoras", 3)');
+    await db!.execute('INSERT INTO lists VALUES(2, "Teclados", 3)');
+    await db!.execute('INSERT INTO items VALUES(0, 0, 0, "Monitor LG", "6 Unds", "21 in")');
+    await db!.execute('INSERT INTO items VALUES(1, 1, 0, "Impresora HP", "10 Unds", "Tinta no incluida")');
     
     List list = await db!.rawQuery('SELECT * FROM lists');
     List item = await db!.rawQuery('SELECT * FROM items');
